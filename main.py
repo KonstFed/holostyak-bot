@@ -1,4 +1,6 @@
 
+from cProfile import label
+import imp
 import logging
 from unittest import skip
 from aiogram import Bot, Dispatcher, types, executor
@@ -6,6 +8,7 @@ from click import argument
 
 from db_utils import db_manager
 import json
+from random import randint
 
 config = open('config.json')
 config = json.load(config)
@@ -39,9 +42,22 @@ async def save_idea(message: types.Message):
     else:
         await message.reply("You are not admin")
 
+def idea2str(idea):
+    """transform row about dish in format for user"""
+    woNone = list(map(lambda x: "" if x==None else str(x),idea))
+    out = "name: " + woNone[2] + "\ndescription: " + woNone[3] + "\ncooked: " + woNone[5]
+    return out
+
+@dp.message_handler(commands=['idea'])
+async def give_idea(message: types.Message):
+    """Gives random idea of what to cook"""
+    records = db_man.get_all(message.chat.id)
+    ind = randint(0,len(records))
+    await message.reply(idea2str(records[ind]))
 
 @dp.message_handler(commands=['show_all'])
 async def save_idea(message: types.Message):
+    """Saves idea what to cook in db. Only admins can do it"""
     records = db_man.get_all(message.chat.id)
     msg = "your ideas:\n"
     for record in records:
