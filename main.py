@@ -10,7 +10,7 @@ from db_utils import db_manager
 import json
 from random import randint
 
-config = open('config.json')
+config = open('configs/config.json')
 config = json.load(config)
 API_TOKEN = config['bot']['token']
 
@@ -39,6 +39,18 @@ async def save_idea(message: types.Message):
         arguments = message.get_args()
         db_man.add_row(message.chat.id,arguments)
         await message.reply("your arguments: " + arguments)
+    else:
+        await message.reply("You are not admin")
+
+@dp.message_handler(commands=['delete'])
+async def save_idea(message: types.Message):
+    member = await bot.get_chat_member(message.chat.id, message.from_user.id)
+    if (member.is_chat_admin()):
+        arguments = message.get_args()
+        if arguments.isnumeric():
+            db_man.add_row(message.chat.id,arguments)
+        else:
+            await message.reply("You should place number of idea that you want delete after command /delete")
     else:
         await message.reply("You are not admin")
 
