@@ -15,4 +15,4 @@ You should have [PostgreSQL](https://www.postgresql.org/) installed on your mach
 
 In the directory of the project you need to create config.json file in configs folder. You can use config_template.json as an example. 
 
-Than you need to run **create_table.py**
+Then you need to run **create_table.py**
