@@ -1,4 +1,3 @@
-from matplotlib import use
 import psycopg2
 
 class db_manager:
