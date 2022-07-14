@@ -20,6 +20,6 @@ class db_manager:
 
     def create_table(self, table_name):
         command = "CREATE TABLE " + table_name + \
-        " (id SERIAL PRIMARY KEY, chat_id integer, name text, description text, season integer, timescooked integer)"
+        " (id SERIAL PRIMARY KEY, chat_id text, name text, description text, season integer, timescooked integer)"
         self.cursor.execute(command)
         self.conn.commit()
