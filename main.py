@@ -2,6 +2,8 @@
 import logging
 from aiogram import Bot, Dispatcher, types, executor
 
+from aiogram.types import CallbackQuery
+
 from db_utils import db_manager
 import json
 from random import randint
@@ -24,19 +26,36 @@ async def send_welcome(message: types.Message):
     This handler will be called when user sends `/start` or `/help` command.
     Initialise chat
     """
-    await message.reply("Hi!\nI'm Holostyak bot!\nPowered by ABOBA.")
+    await message.reply("Hi!\n\
+                         I'm Holostyak bot!\n\
+                         Powered by ABOBA.")
 
-
+@dp.message_handler(commands = ['help'])
+async def print_commands(message: types.Message):
+    return await message.reply("/save - save new recipe\n     \
+                                /delete - delete recipe\n     \
+                                /idea - gives random dish\n   \
+                                /show_all - shows all dishes?")
 
 @dp.message_handler(commands=['save'])
 async def save_idea(message: types.Message):
     member = await bot.get_chat_member(message.chat.id, message.from_user.id)
     if (member.is_chat_admin()):
-        arguments = message.get_args()
-        db_man.add_row(message.chat.id,arguments)
-        await message.reply("your arguments: " + arguments)
+        # arguments = message.get_args()
+        # db_man.add_row(message.chat.id, arguments)
+
+        keyboard = types.InlineKeyboardMarkup()
+        keyboard.add(types.InlineKeyboardButton(text = "Add name", callback_data = "add_name"))
+        keyboard.add(types.InlineKeyboardButton(text = "Add season", callback_data = "add_season"))
+        keyboard.add(types.InlineKeyboardButton(text = "Add type", callback_data = "add_type"))
+
+        await message.reply("Creating new idea", reply_markup = keyboard)
     else:
         await message.reply("You are not admin")
+
+@dp.callback_query_handler(lambda c: c.data == 'add_name')
+async def add_name(callback_query: CallbackQuery):
+    await bot.send_message("Tadam")
 
 @dp.message_handler(commands=['delete'])
 async def save_idea(message: types.Message):
@@ -52,7 +71,7 @@ async def save_idea(message: types.Message):
 
 def idea2str(idea):
     """transform row about dish in format for user"""
-    woNone = list(map(lambda x: "" if x==None else str(x),idea))
+    woNone = list(map(lambda x: "" if x==None else str(x), idea))
     out = "name: " + woNone[2] + "\ndescription: " + woNone[3] + "\ncooked: " + woNone[5]
     return out
 
