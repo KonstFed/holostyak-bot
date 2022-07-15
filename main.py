@@ -60,7 +60,7 @@ def idea2str(idea):
 async def give_idea(message: types.Message):
     """Gives random idea of what to cook"""
     records = db_man.get_all(message.chat.id)
-    ind = randint(0,len(records))
+    ind = randint(0,len(records)-1)
     await message.reply(idea2str(records[ind]))
 
 @dp.message_handler(commands=['show_all'])
