@@ -9,8 +9,8 @@ class db_manager:
         self.cursor.close()
         self.conn.close()
     
-    def add_row(self, chat_id, idea):
-        self.cursor.execute("INSERT INTO ideas (chat_id, name) VALUES(%s,%s)",(chat_id,idea))
+    def add_row(self, chat_id, idea_name, description="",season=-1, timescooked = 0):
+        self.cursor.execute("INSERT INTO ideas (chat_id, name, description, season, timescooked) VALUES(%s,%s,%s,%s,%s)",(chat_id,idea_name))
         self.conn.commit()
 
     def get_all(self, chat_id):
