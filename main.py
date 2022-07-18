@@ -1,4 +1,4 @@
-
+import os
 import logging
 from aiogram import Bot, Dispatcher, types, executor
 
@@ -7,6 +7,10 @@ from aiogram.types import CallbackQuery
 from db_utils import db_manager
 import json
 from random import randint
+
+abs_path = os.path.abspath(__file__)
+dname = os.path.dirname(abs_path)
+os.chdir(dname)
 
 config = open('configs/config.json')
 config = json.load(config)
