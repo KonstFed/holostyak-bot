@@ -6,6 +6,7 @@ from aiogram.types import CallbackQuery
 
 from db_utils import db_manager
 import json
+import time
 from random import randint
 
 abs_path = os.path.abspath(__file__)
@@ -99,4 +100,5 @@ async def save_idea(message: types.Message):
 
 
 if __name__ == "__main__":
+    time.sleep(5)
     executor.start_polling(dp,skip_updates=True)
