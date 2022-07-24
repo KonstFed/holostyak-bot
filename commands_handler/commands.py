@@ -6,14 +6,17 @@ change the state of the idea.
 """
 
 
-from aiogram                        import types
-from random                         import randint
+from aiogram                         import types
+from random                          import randint
 
-from configs.bot_config             import db_man, dp, bot
+from configs.bot_config              import API_TOKEN, db_man, dp, bot
 
-from commands_handler.current_ideas import Idea
+from commands_handler.current_ideas  import Idea
+from commands_handler                import inline_handler
 
-from commands_handler.inline_actions.new_idea import new_idea_kb, refresh_new_idea
+from commands_handler.keyboards.edit_idea import edit_idea_kb
+
+from commands_handler.current_ideas import refresh_idea
 
 @dp.message_handler(commands=['start'])
 async def send_welcome(message: types.Message):
@@ -85,11 +88,16 @@ async def save_idea(message: types.Message):
     await message.reply(msg)
 
 @dp.message_handler()
-async def echo_message(message: types.Message):
+async def message_handler(message: types.Message):
     """
     Checks whether this message should change te state of the idea or not
     and if yes it changes it.
     """
+
+    if message.via_bot != None and \
+       message.via_bot.bot._BaseBot__token == API_TOKEN:
+        await inline_command_handler(message)
+        return
 
     # if the user don't have opened ideas
     if Idea.current_ideas.get(message.from_user.id) is None         \
@@ -102,4 +110,16 @@ async def echo_message(message: types.Message):
 
     await message.delete()
 
-    await refresh_new_idea(message.from_user.id, idea.inline_message_id, new_idea_kb())
+    await refresh_idea(message.from_user.id, idea.inline_message_id, None, edit_idea_kb())
+
+async def inline_command_handler(message: types.Message):
+    title = message.text.partition('\n')[0]
+    
+    match title:
+        case inline_handler.create_idea_title:
+            if (Idea.current_ideas.get(message.from_user.id) is None):
+                Idea.current_ideas[message.from_user.id] = Idea()
+
+            Idea.current_ideas[message.from_user.id].chat_id = message.chat.id
+        case _:
+            pass
