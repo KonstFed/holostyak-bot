@@ -5,9 +5,10 @@ Contains actions related to creating new idea.
 from aiogram                        import types
 from aiogram.types                  import CallbackQuery, InlineKeyboardMarkup, User, ParseMode
 
-from configs.bot_config             import bot, dp
+from configs.bot_config             import bot, dp, db_man
 
 from commands_handler.current_ideas import Idea
+
 
 async def refresh_new_idea(from_user: User, inline_message: str, keyboard = None):
     """
@@ -63,6 +64,7 @@ async def add_name(callback_query: CallbackQuery):
     await callback_query.answer('Writing to database!') 
 
     # TODO: Add writing into database !!!!!!!!!!!
+    db_man.add_row(callback_query.chat_instance,idea.name, idea.author, idea.season)
     
     await bot.edit_message_reply_markup(inline_message_id = idea.inline_message_id, 
                                         reply_markup      = None)
