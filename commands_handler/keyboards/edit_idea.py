@@ -85,7 +85,7 @@ async def finish_editing(callback_query: CallbackQuery):
     for idea_db in Idea.tmp_db:
         if idea.number == idea_db.number:
             does_exist = True
-            idea_db = idea
+            idea_db    = idea
             break
 
     if not does_exist:
