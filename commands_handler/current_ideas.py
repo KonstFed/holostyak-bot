@@ -30,7 +30,7 @@ class Idea:
         self.inline_message_id = inline_message_id
 
         self.edit_state  = ''
-        self.number = len(self.tmp_db) # TODO: database
+        self.number      = len(self.tmp_db) # TODO: database
 
     # TODO: get idea number from database
     def __repr__(self) -> text:
