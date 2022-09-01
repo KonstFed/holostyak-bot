@@ -1,0 +1,11 @@
+{
+    "db":{
+        "dbname": "name of your database",
+        "user":"your user",
+        "password":"password to your user",
+        "host":"where is hosted"
+    },
+    "bot":{
+        "token": "telegram token"
+    }
+}
