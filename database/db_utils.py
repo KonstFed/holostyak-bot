@@ -10,7 +10,11 @@ class db_manager:
         self.conn.close()
     
     def add_row(self, chat_id, idea_name, description="",season=-1, timescooked = 0):
-        self.cursor.execute("INSERT INTO ideas (chat_id, name, description, season, timescooked) VALUES(%s,%s,%s,%s,%s)",(chat_id,idea_name))
+        self.cursor.execute("INSERT INTO ideas (chat_id, name, description, season, timescooked) VALUES(%s,%s,%s,%s,%s)",(str(chat_id),idea_name,description,str(season),str(timescooked)))
+        self.conn.commit()
+
+    def delete_row(self,id):
+        self.cursor.execute("DELETE FROM ideas WHERE id = %s",(str(id)))
         self.conn.commit()
 
     def get_all(self, chat_id):
