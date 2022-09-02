@@ -26,3 +26,7 @@ class db_manager:
     def get_last_id(self):
         self.cursor.execute("SELECT last_value FROM ideas_id_seq")
         return self.cursor.fetchall()
+
+    def change_row(self, id, idea_name, author, description, season, timescooked ):
+        self.cursor.execute("UPDATE SET name = %s, author = %s, description = %s, season = %s, timescooked = %s WHERE id = %s" , (idea_name, author, description, season,timescooked, id))
+        self.conn.commit()
