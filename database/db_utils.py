@@ -8,8 +8,8 @@ class db_manager:
         self.cursor.close()
         self.conn.close()
     
-    def add_row(self, idea_name = "", description = "",season = 0, timescooked = 0):
-        self.cursor.execute("INSERT INTO ideas (name, description, season, timescooked) VALUES(%s,%s,%s,%s,%s)",(idea_name, description, season, timescooked))
+    def add_row(self, idea_name, author, description,season, timescooked = 0):
+        self.cursor.execute("INSERT INTO ideas (name, author, description, season, timescooked) VALUES(%s,%s,%s,%s,%s)",(idea_name, author, description, season, timescooked))
         self.conn.commit()
 
     def get_all(self):
@@ -19,6 +19,6 @@ class db_manager:
 
     def create_table(self, table_name):
         command = "CREATE TABLE " + table_name + \
-        " (id SERIAL PRIMARY KEY, name text, description text, season integer, timescooked integer)"
+        " (id SERIAL PRIMARY KEY, name text, author text, description text, season integer, timescooked integer)"
         self.cursor.execute(command)
         self.conn.commit()

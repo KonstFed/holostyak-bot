@@ -102,7 +102,7 @@ async def finish_editing(callback_query: CallbackQuery):
         elif (idea.season == Season.AUTUMN):
             int_season = 4
 
-        db_man.add_row(idea.chat_id, idea_name = idea.name,description=idea.description, season=int_season,timescooked=0)
+        db_man.add_row(idea.chat_id, idea.name, idea.author, idea.description, int_season)
         Idea.tmp_db.append(idea)
     
     await bot.edit_message_reply_markup(inline_message_id = idea.inline_message_id, 
