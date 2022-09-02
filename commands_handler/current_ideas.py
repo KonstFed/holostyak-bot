@@ -8,7 +8,7 @@ from aiogram.utils.markdown import text, bold
 
 from enums.Season           import Season
 from aiogram.types          import User, ParseMode
-from configs.bot_config     import bot
+from configs.bot_config     import bot, db_man
 
 class Idea:
     """
@@ -39,6 +39,24 @@ class Idea:
              + 'Season: '      + self.season._name_     + '\n'   \
              + 'Author: '      + self.author            + '\n'   \
              + 'Description: ' + self.description
+
+    @classmethod
+    def load_ideas_from_db(cls):
+        # Get strings of all ideas that consist of
+        # id, name, author, description, season (0, 1, 2, 3, 4), times_cooked 
+        ideas = db_man.get_all()
+
+        for idea_db in ideas:
+            idea = Idea()
+            idea.number      = idea_db[0]
+            idea.name        = idea_db[1]
+            idea.author      = idea_db[2]
+            idea.description = idea_db[3]
+            idea.season      = idea_db[4]
+
+            cls.tmp_db.append(idea)
+
+        pass
 
 async def refresh_idea(from_user_id: User, inline_message_id: str, idea = None, keyboard = None):
     """
