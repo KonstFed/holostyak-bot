@@ -61,8 +61,7 @@ class Idea:
             cls.tmp_db.append(idea)
 
         # get last_id
-
-        pass
+        last_id = db_man.get_last_id()
 
 async def refresh_idea(from_user_id: User, inline_message_id: str, idea = None, keyboard = None):
     """
