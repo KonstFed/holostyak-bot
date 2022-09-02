@@ -22,3 +22,7 @@ class db_manager:
         " (id SERIAL PRIMARY KEY, name text, author text, description text, season integer, timescooked integer)"
         self.cursor.execute(command)
         self.conn.commit()
+
+    def get_last_id(self):
+        self.cursor.execute("SELECT last_value FROM ideas_id_seq")
+        return self.cursor.fetchall()
