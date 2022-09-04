@@ -7,7 +7,7 @@ from aiogram.types                  import CallbackQuery, InlineKeyboardMarkup, 
 
 from configs.bot_config             import bot, dp, db_man
 
-from commands_handler.current_ideas import Idea, refresh_idea
+from commands_handler.current_ideas import Idea
 
 from enums.Season import Season
 
@@ -91,18 +91,8 @@ async def finish_editing(callback_query: CallbackQuery):
             break
 
     if not does_exist:
-        
-        int_season = 0
-        if (idea.season == Season.WINTER):
-            int_season = 1
-        elif (idea.season == Season.SPRING):
-            int_season = 2
-        elif (idea.season == Season.SUMMER):
-            int_season = 3
-        elif (idea.season == Season.AUTUMN):
-            int_season = 4
-
-        db_man.add_row(idea.chat_id, idea_name = idea.name,description=idea.description, season=int_season,timescooked=0)
+        int_season = idea.season.value
+        db_man.add_row(idea.name, idea.author, idea.description, int_season)
         Idea.tmp_db.append(idea)
     
     await bot.edit_message_reply_markup(inline_message_id = idea.inline_message_id, 

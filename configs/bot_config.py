@@ -1,5 +1,6 @@
-from aiogram           import Bot, Dispatcher
-from database.db_utils import db_manager
+from aiogram                        import Bot, Dispatcher
+from commands_handler.current_ideas import Idea
+from database.db_utils              import db_manager
 
 import json
 import logging
@@ -14,3 +15,5 @@ bot = Bot(token=API_TOKEN)
 dp  = Dispatcher(bot)
 
 db_man = db_manager(config['db'])
+
+Idea.load_ideas_from_db()
