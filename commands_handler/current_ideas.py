@@ -31,12 +31,12 @@ class Idea:
         self.inline_message_id = inline_message_id
 
         self.edit_state  = ''
-        self.number      = self.last_id
-        self.last_id    += 1
+        self.number = 0        
 
     # TODO: get idea number from database
     def __repr__(self) -> text:
-        return bold('Idea number: ' + str(self.number)) + '\n\n' \
+        num = Idea.last_id + 1 if self.number == 0 else self.number
+        return bold('Idea number: ' + str(num)) + '\n\n' \
              + 'Idea: '        + self.name              + '\n'   \
              + 'Season: '      + self.season._name_     + '\n'   \
              + 'Author: '      + self.author            + '\n'   \
@@ -61,7 +61,12 @@ class Idea:
             cls.tmp_db.append(idea)
 
         # get last_id
-        last_id = db_man.get_last_id()
+        cls.last_id = db_man.get_last_id()
+
+    @classmethod
+    def increase_last_id(cls):
+        cls.last_id += 1
+        return cls.last_id
 
 async def refresh_idea(from_user_id: User, inline_message_id: str, idea = None, keyboard = None):
     """

@@ -25,4 +25,4 @@ class db_manager:
 
     def get_last_id(self):
         self.cursor.execute("SELECT last_value FROM ideas_id_seq")
-        return self.cursor.fetchall()
+        return self.cursor.fetchall()[0][0]

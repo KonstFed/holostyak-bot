@@ -101,7 +101,7 @@ async def finish_editing(callback_query: CallbackQuery):
     Idea.current_ideas.pop(callback_query.from_user.id)
      
 @dp.callback_query_handler(lambda c: c.data == 'edit_cancel')
-async def finish_editing(callback_query: CallbackQuery):
+async def cancel_editing(callback_query: CallbackQuery):
     # In case if somebody already saved all changes - we do nothing.
     if Idea.current_ideas.get(callback_query.from_user.id) is None:
         await callback_query.answer('Only user who created idea can edit it now') 
@@ -112,5 +112,7 @@ async def finish_editing(callback_query: CallbackQuery):
     await bot.edit_message_text(inline_message_id = idea.inline_message_id,
                                 parse_mode        = ParseMode.MARKDOWN,
                                 text              = '*canceled*')
+
+    Idea.last_id -= 1
 
     Idea.current_ideas.pop(callback_query.from_user.id)
