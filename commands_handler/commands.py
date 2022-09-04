@@ -121,5 +121,7 @@ async def inline_command_handler(message: types.Message):
                 Idea.current_ideas[message.from_user.id] = Idea()
 
             Idea.current_ideas[message.from_user.id].chat_id = message.chat.id
+            Idea.last_id += 1
+            Idea.current_ideas[message.from_user.id].number = Idea.last_id
         case _:
             pass
