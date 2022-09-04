@@ -4,7 +4,7 @@ from aiogram.types                        import CallbackQuery, InlineKeyboardMa
 from commands_handler.current_ideas       import refresh_idea
 from commands_handler.keyboards.edit_idea import edit_idea_kb
 
-from configs.bot_config                   import bot, dp
+from configs.bot_config                   import bot, dp, db_man
 
 from commands_handler.current_ideas       import Idea
 
@@ -83,6 +83,7 @@ async def get_idea(callback_query: CallbackQuery):
             Idea.current_ideas[callback_query.from_user.id] = idea
             await refresh_idea(callback_query.from_user.id, callback_query.inline_message_id, idea, edit_idea_kb())
         case ChooseAction.DELETE.name:
+            db_man.delete_row(idea.number)
             Idea.tmp_db.remove(idea)
             await bot.edit_message_reply_markup(inline_message_id = callback_query.inline_message_id,
                                                 reply_markup      = choose_idea_kb(ChooseAction[action], 1))
